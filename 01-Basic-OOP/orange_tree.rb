@@ -57,3 +57,6 @@ puts orangetree_1.measure_height
 n = 200
 puts "You have produce #{orangetree_1.count_the_oranges} oranges. You pick #{n} delicious oranges. 
 There still are #{orangetree_1.pick_an_orange(n)} oranges"
+
+## pour les methodes qui modifient un variable d'instance, il faut mieux appeller la methode qui se finisse avec un ! 
+

@@ -1,5 +1,7 @@
 
 # This is how you define your own custom exception classes
+require_relative "Transactions" #relativ path to access the Transaction file. 
+
 class DepositError < StandardError
 end
 
@@ -23,7 +25,7 @@ class BankAccount
     @transactions = []
     @position = 0
     @name, @iban = name, iban    
-    @crypted_iban = @iban[0..3]+"*****"+@iban[(@iban.length-4)..(@iban.length-1)] 
+
     add_transaction(initial_deposit)
   end
     
@@ -39,19 +41,38 @@ class BankAccount
   
   def transactions_history(args = {})
     # Should print transactions, BUT NOT return the transaction array !
-  end  
+    if args.empty?
+      puts "no password given"
+      return nil
+    if args[password] == @password
+      puts @transactions
+      return @transactions.dup #(dup for duplicate the transaction without alteration
+    else
+      puts "wrong password"
+      return nil #return something different from the puts to use it in other parts of the code)
+    end  
+
+  def iban
+    #partial getter (shoulde hide the middle of the iban). .dup allows to duplicate the iban
+    @iban[0..3]+"*****"+@iban[(@iban.length-4)..(@iban.length-1)] 
+  end
+
   
   def to_s
-    # Method used when printing account object as string (also used for string interpolation)
+    # here we overwrite the to_s object defined in the 'mother class' to string, which usually print the object name and place when called by Puts. 
+    # So if we use puts, it will use the to_s method defined in the class method.
+    "Owner : #{name}  n\IBAN = #{iban} \n Position: #{@position}"
   end
           
   private  
+
   
   def add_transaction(amount)
     # Main account logic
     @position = @position + amount
     # Should add the amount in the transactions array
-    @transactions << amount
+    @transactions << Transactions.new(account) #On rappel la classe transaction pour pouvoir avoir plus de souplesse sur les donnees de transaction. 
+
     
     # Should update the current position
 
